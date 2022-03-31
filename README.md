@@ -20,19 +20,19 @@ All were useful and I'm not sure which I followed most in the end. It's all typi
 
 In addition to the TIG stack I found, modified and installed an Epever modbus telegraf input plugin conf file (epever_modbus.conf). I altered it to have short names for the measurements and for my specific USB adapter. It is then placed in /etc/telegraf/telegraf.d/ where it is picked up by telegraf. There are also some changes to the default telegraf.conf so that system inputs aren't collected as much and some of my own logging choices etc.
 
-## Steps to Install the Dashboard
+### Steps to Install the Dashboard
 
 1. Follow a tutorial above to get Telegraf, Influxdb and Grafana installed and running. I assume that part is done and each is running as it's own user with systemd services enabled so they start at boot.
 
 2. TODO...
 
 
-## Battery Energy Gauge - (Coulomb counter type battery level indicator)
+### Battery Energy Gauge - (Coulomb counter type battery level indicator)
 
 In addition to some pretty typical Grafana gauges and charts I also put together an energy gauge that was a bit more involved. Due to some limits on getting timestamps from a subquery I figured out a workaround using a Grafana csv data source plugin, and a cronjob with simple script to pull and save the most recent time the batteyr was FULL. I'll add details on how this works here.
 
 TODO...
   
-## Bonus - Solar Tunnel for viewing dashboard on some remote server (totally optional)
+### Bonus - Solar Tunnel for viewing dashboard on some remote server (totally optional)
 
 TODO...
