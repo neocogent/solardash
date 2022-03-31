@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sudo -u grafana influx -database solar -execute "select last(B_V) from modbus where B_V >= 14.5" -format csv | sudo -u grafana tee /var/lib/grafana/csv/solarvars >/dev/null

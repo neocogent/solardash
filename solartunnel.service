@@ -1,0 +1,15 @@
+[Unit]
+Description=Solar Reverse Tunnel Service
+ConditionPathExists=|/usr/bin
+After=grafana-server.service
+
+[Service]
+User=chris
+ExecStart=/usr/bin/autossh -NTR 3001:localhost:3000 lucy@pixie
+
+# Restart every >2 seconds to avoid StartLimitInterval failure
+RestartSec=5
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
