@@ -77,7 +77,7 @@ This is an extra I needed because I wanted to view my dashboard externally on an
 
 1. Install autossh:  `sudo apt install autossh`.
 
-2. Copy the `solartunnel.service` to the `/lib/systemd/system` directory and edit it to have desired remote and local ports, and suitable user@host values. You probably need to enable GatewayPorts on the remote host system (set in `/etc/ssh/sshd_config`) to allow the tunnel to work. Enable the service: `sudo systemctl enable solartunnel` and try it `sudo systemctl start solartunnel`. You can sheck status or use `sudo netstat -ntp` to see if the port is listening on remote host.
+2. Copy the `solartunnel.service` to the `/lib/systemd/system` directory and edit it to have desired remote and local ports, and suitable user@host values. You probably need to enable GatewayPorts on the remote host system (set in `/etc/ssh/sshd_config`) to allow the tunnel to work. Enable the service: `sudo systemctl enable solartunnel` and try it `sudo systemctl start solartunnel`. You can check status or use `sudo netstat -lntp` to see if the port is listening on remote host.
 
 3. Append, or integrate as suitable, the example reverse proxy lines given in `nginx-proxy.conf`. Obviously this will depend on how you embed the dashboard into an existing web server config but these lines are the basics of what you would add on.
 
