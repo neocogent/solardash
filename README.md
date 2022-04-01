@@ -32,25 +32,27 @@ You will need a RS-485-USB adapter to get data from controller to raspi.
 
 4. Edit or copy over grafini.ini to /etc/grafini/ - note I have enabled serve_from_sub_path option but you may not need it. The other change is csv plugin at bottom with allow_local_mode = true. 
 
-5. Create a database in influx called solar, or you can just use the defult but will need to edit the dashboard data source to match.
+5. Create a database in influx called solar, or you can just use the default but will need to edit the dashboard data source to match.
 
 6. On Grafana dashboard click "plus" menu item and select "Import". It allows for uploading a new dashboard. Choose the "solar.json" file here and import it. 
 
 7. Also in Grafana, click "Server Admin" menu, "Plugins" and search for and install the CSV plugin. This is used for the battery level gauge workaround as described below.
 
-8. Copy the lastfull script over to /usr/local/bin and be sure to "chmod +x" the file.
+8. Copy the `lastfull` script over to `/usr/local/bin/lastfull` and be sure to "chmod +x" the file.
 
-9. Install the cronjob: `sudo crontab -e` and append line from cronjob file here. You can alter the time schedule as you please, though I'd suggest either every hour, or once a day after you expect battery to be fully charged. See battery gauge info below about how this works.
+9. Install the cronjob: `sudo crontab -e` and append line from `cronjob` file here. You can alter the time schedule as you please, though I'd suggest either every hour, or once a day after you expect battery to be fully charged. See battery gauge info below about how this works.
 
 10. Test it out and see if it works. 
 
 
-### Battery Energy Gauge - (Coulomb counter type battery level indicator)
+### Battery Energy Gauge - (Coulomb counter style indicator)
 
-In addition to some pretty typical Grafana gauges and charts I also put together an energy gauge that was a bit more involved. Due to some limits on getting timestamps from a subquery I figured out a workaround using a Grafana csv data source plugin, and a cronjob with simple script to pull and save the most recent time the batteyr was FULL. I'll add details on how this works here.
+In addition to some pretty typical Grafana gauges and charts I also put together an energy gauge that was a bit more involved, but gives  better indication of batery level than simple voltage based ones. Due to some limits on getting timestamps from an Influx subquery I figured out a workaround using the Grafana csv data source plugin, and a cronjob with simple script to pull and save the most recent time the battery was FULL. I'll add details on how this works here.
 
 TODO...
   
-### Bonus - Solar Tunnel for viewing dashboard on some remote server (totally optional)
+### Bonus - Solar Tunnel - Optional
+
+  (for viewing dashboard via remote server)
 
 TODO...
