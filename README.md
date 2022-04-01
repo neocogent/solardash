@@ -1,14 +1,14 @@
 ### TIG Stack on Raspberry Pi for Solar Dashboard
 
-![alt Sola Dashboard screen](screen.jpg "Dashboard screen cap")
+![alt Solar Dashboard screen](dashboard.jpg "Dashboard screen cap")
 
 **TIG** is the Telegraf, Influxdb, Grafana set of tools.
 
-  Telegraf collects data from various sources. In my case from a cheap $2 RS-485-USB adapter available from AliExpress or eBay. This interfaces to my Epever Tracer 3210AN solar charge controller. The Tracer is an MPPT controller that can accpet PV input up to 100V and "buck convert" it down to match a 12V / 24V battery system. It has a good set of measured voltage, current and power values that it can provide via an RS-485 Modbus interface. This data is collected by Telegraf and stored in the Influxdb.
+  **Telegraf** collects data from various sources. In my case from a cheap $2 RS-485-USB adapter available from AliExpress or eBay. This interfaces to my Epever Tracer 3210AN solar charge controller. The Tracer is an MPPT controller that can accpet PV input up to 100V and "buck convert" it down to match a 12V / 24V battery system. It has a good set of measured voltage, current and power values that it can provide via an RS-485 Modbus interface. This data is collected by Telegraf and stored in the Influxdb.
   
-  Influx is a database system - optimized for storing time series data and querying it in various time related ways.
+  **Influx** is a database system - optimized for storing time series data and querying it in various time related ways.
   
-  Grafana is a visual web panel development tool. It can be used to easily create web dashboards with various gauges and graphs. 
+  **Grafana** is a visual web panel development tool. It can be used to easily create web dashboards with various gauges and graphs. 
   
 This repo is a collection of various config and script files that tie my dashboard together and make it work. It assumes you have a basic install of the TIG stack. There are many tutorials around the web for getting that part done. Here are a couple I referred to when setting this up:
 
@@ -20,7 +20,11 @@ These were useful and I'm not sure which I followed most in the end. It's typica
 
 In addition to the TIG stack I found, modified and installed an Epever modbus telegraf input plugin conf file (epever_modbus.conf). I altered it to have short names for the measurements and for my specific USB adapter. There are also some changes to the default telegraf.conf so that system inputs aren't collected as much and some of my own logging choices etc.
 
-You will need a RS-485-USB adapter to get data from controller to raspi. 
+You will need a RS-485-USB adapter to get data from controller to raspi. Here's a pic of my connection between charger and raspi. 
+
+![alt Solar charger connection to Raspi](solar_raspi.jpg "Charger and Raspi")
+
+(pay no attention to small key pad  - that is for bluetooth music player using mocp sharing same raspi)
 
 ### Steps to Install the Dashboard
 
@@ -30,7 +34,7 @@ You will need a RS-485-USB adapter to get data from controller to raspi.
 
 3. Edit or copy over telegraf.conf and telegraf.service so it starts with correct config and config directory. You may want to edit the conf file to suit or just merge in differences accordingly. Restart telegraf.
 
-4. Edit or copy over grafini.ini to /etc/grafini/ - note I have enabled serve_from_sub_path option but you may not need it. The other change is csv plugin at bottom with allow_local_mode = true. 
+4. Edit or copy over grafana.ini to /etc/grafana/ - note I have enabled serve_from_sub_path option but you may not need it. The other change is csv plugin at bottom with allow_local_mode = true. Restart grafana-server.
 
 5. Create a database in influx called solar, or you can just use the default but will need to edit the dashboard data source to match.
 
