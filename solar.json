@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1648763325943,
+  "iteration": 1648779032090,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -903,7 +903,7 @@
           "measurement": "modbus",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "select sum(\"BE\")-sum(\"LE\")+600 from (select integral(B_P)/3600 as \"BE\",integral(L_P)/3600 as \"LE\" from modbus where time >= $lastfull and time <= now() group by time(1m))",
+          "query": "select sum(\"BE\")-sum(\"LE\")+$FullBatteryWh from (select integral(B_P)/3600 as \"BE\",integral(L_P)/3600 as \"LE\" from modbus where time >= $lastfull and time <= now() group by time(1m))",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1424,8 +1424,8 @@
       {
         "current": {
           "selected": false,
-          "text": "1648696510000000000",
-          "value": "1648696510000000000"
+          "text": "1648774670000000000",
+          "value": "1648774670000000000"
         },
         "datasource": {
           "type": "marcusolsson-csv-datasource",
@@ -1456,6 +1456,13 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "hide": 2,
+        "name": "FullBatteryWh",
+        "query": "600",
+        "skipUrlSync": false,
+        "type": "constant"
       }
     ]
   },
@@ -1467,6 +1474,6 @@
   "timezone": "",
   "title": "Solar",
   "uid": "187bbiZRk",
-  "version": 49,
+  "version": 50,
   "weekStart": ""
 }
