@@ -51,15 +51,15 @@ You will need a RS-485-USB adapter to get data from controller to raspi. Here's 
 
 ### Battery Energy Gauge (coulomb counter style indicator)
 
-In addition to some pretty typical Grafana gauges and charts I also put together an energy gauge that is a bit more involved, but gives  better indication of battery level than simple voltage based ones. Due to some limits on getting timestamps from an Influx subquery I figured out a workaround using the Grafana csv data source plugin, and a cronjob with simple script to pull and save the most recent time the battery was FULL. Here how this works in case you need to alter it.
+In addition to some pretty typical Grafana gauges and charts I also put together an energy gauge that is a bit more involved, but gives  better indication of battery level than simple voltage based ones. Due to some limits on getting timestamps from an Influx subquery I figured out a workaround using the Grafana csv data source plugin, and a cronjob with simple script to pull and save the most recent time the battery was FULL. Here is how this works in case you need to alter it.
 
 The Battery Level gauge has a influx query as follows:
 
     select sum("BE")-sum("LE")+$FullBatteryWh from (select integral(B_P)/3600 as "BE",integral(L_P)/3600 as "LE" from modbus where time >= $lastfull and time <= now() group by time(1m))
     
-This sums up the power in (from B_P intgerated as BE) and subtracts the power out (from L_P intgerated as LE) over a time perios. The time period starts from the last known timewhen battery is full. I couldn't find a way to get the timestamp, in a subquery, when last full so I did that externally. I have a cronjob which periodically checks the last time battery was full and stores it as csv data (in /var/lib/grafana/csv/solarvars). The last time full is picked up on dashboard and put in the $lastfull variable, which becomes the "from" in a time range of the query.
+This sums up the power in (from B_P integrated as BE) and subtracts the power out (from L_P integrated as LE) over a time range. The range  starts from the last known time when the battery was full. I couldn't find a way to get the timestamp from a subquery so I did that externally. I have a cronjob which periodically checks the last time battery was full and stores it as csv data (in /var/lib/grafana/csv/solarvars). The timestamp is picked up from csv file and put in the $lastfull variable, which becomes the "from" in a time range of the query.
 
-The lastfull scrip simply does a cli query of influx which returns csv format data, as follows:
+The lastfull bash script simply does a cli query of influx which returns csv format data, as follows:
 
     #!/bin/bash
 
@@ -67,18 +67,18 @@ The lastfull scrip simply does a cli query of influx which returns csv format da
 
 This script is run periodically by a cronjob to ensure the sum of power in/out does not drift too far due to accumlated measurement errors.
 
-As can be seen in query above I use a battery voltage of 14.5 (LiFePO4) to indicate FULL, but you could alter the query for a differrent voltage (depends on battery) or other criteria. This is a simple test which has been working ok for me.
+As can be seen I use a battery voltage of 14.5 (LiFePO4) to indicate FULL, but you could alter the query for a differrent voltage (depends on type of battery) or other criteria. This is a simple test which has been working ok for me.
   
 ### Bonus - Solar Tunnel - Optional
 
   (for viewing dashboard via remote server)
 
-This is an extra I needed because I wanted to view my dashboard externally on another server without opening my raspberry pi to the world. I do this using a secure reverse tunnel created by ssh. The solartunnel.service file opens a tunnel to a given IP (a system you must have login access to and preferably set up with key auth, avoiding passwords). It uses autossh to monitor and maintain a more robust tunnel. So follow these extra steps if this is useful for you.
+This is an extra I needed because I wanted to view my dashboard externally on another server without opening my raspberry pi to the world. I do this using a secure reverse tunnel created by ssh. The solartunnel.service file opens a tunnel to a given IP (a system you must have login access to and preferably set up with key auth, avoiding passwords). It uses autossh to monitor and maintain a more robust tunnel. Follow these extra steps if this is useful for you.
 
 1. Install autossh:  `sudo apt install autossh`.
 
-2. Copy the `solartunnel.service` to the `/lib/systemd/system` directory and edit it to have desired remote and local ports, and suitable user@host values. You probably need to enable GatewayPorts on the given host system (set in `/etc/ssh/sshd_config`) to allow the tunnel to work.
+2. Copy the `solartunnel.service` to the `/lib/systemd/system` directory and edit it to have desired remote and local ports, and suitable user@host values. You probably need to enable GatewayPorts on the remote host system (set in `/etc/ssh/sshd_config`) to allow the tunnel to work. Enable the service: `sudo systemctl enable solartunnel` and try it `sudo systemctl start solartunnel`. You can sheck status or use `sudo netstat -ntp` to see if the port is listening on remote host.
 
-3. Append, or integrate as suitable, the example reverse proxy lines given in nginx-proxy.conf. Obviously this will depend on how you embed the dashboard into an existing web server config, but these lines are the core of what you may add on.
+3. Append, or integrate as suitable, the example reverse proxy lines given in `nginx-proxy.conf`. Obviously this will depend on how you embed the dashboard into an existing web server config but these lines are the basics of what you would add on.
 
-4. Test the dashboard from your remote server.
+4. Test the dashboard viewable via your remote server.
