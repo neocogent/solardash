@@ -4,9 +4,9 @@
 
 **TIG** is the Telegraf, Influxdb, Grafana set of tools.
 
-  **Telegraf** collects data from various sources. In my case from a cheap $2 RS-485-USB adapter available from AliExpress or eBay. This interfaces to my Epever Tracer 3210AN solar charge controller. The Tracer is an MPPT controller that can accpet PV input up to 100V and "buck convert" it down to match a 12V / 24V battery system. It has a good set of measured voltage, current and power values that it can provide via an RS-485 Modbus interface. This data is collected by Telegraf and stored in the Influxdb.
+  **Telegraf** collects data from various sources and can send it to various data systems. In my case from a cheap $2 RS-485-USB adapter available from AliExpress or eBay. This interfaces to my Epever Tracer 3210AN solar charge controller. The Tracer is an MPPT controller that can accpet PV input up to 100V and "buck convert" it down to match a 12V / 24V battery system. It has a good set of measured voltage, current and power values that it can provide via an RS-485 Modbus interface. This data is collected by Telegraf and sent to Influxdb.
   
-  **Influx** is a database system - optimized for storing time series data and querying it in various time related ways.
+  **Influxdb** is a database system - optimized for storing time series data and querying it in various time related ways.
   
   **Grafana** is a visual web panel development tool. It can be used to easily create web dashboards with various gauges and graphs. 
   
