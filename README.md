@@ -67,7 +67,9 @@ The lastfull bash script simply does a cli query of influx which returns csv for
 
 This script is run periodically by a cronjob to ensure the sum of power in/out does not drift too far due to accumlated measurement errors.
 
-As can be seen I use a battery voltage of 14.5 (LiFePO4) to indicate FULL, but you could alter the query for a differrent voltage (depends on type of battery) or other criteria. This is a simple test which has been working ok for me.
+As can be seen I use a battery voltage of 14.5 (LiFePO4) to indicate FULL, but you could alter the query for a differrent voltage (depends on type of battery) or other criteria. This is a simple test which has been working ok for me. In my tests of an overnight draw down and charge up it has been within 1% of full. I set my cronjob for 11am, 1pm and 4 pm. So usually the 1% error is adjusted back each time. 
+
+If the error was over-full I would expect maybe it's due to efficiency loss of the battery, but instead it always runs a little under-full. So it's likely just accumulated measurement errors. I'd not expect volt-amp readings to be as good as 1%, and since power is calculated from those it means each is accurate to about 0.5%. Not bad, and good to have a way to reset accumulated error.
   
 ### Bonus - Solar Tunnel - Optional
 
